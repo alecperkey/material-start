@@ -3,7 +3,7 @@
   angular
        .module('users')
        .controller('UserController', [
-          'userService', '$mdSidenav', '$mdBottomSheet', '$log', '$q',
+          'userService', '$mdSidenav', '$mdBottomSheet', '$log', '$http', '$q',
           UserController
        ]);
 
@@ -14,7 +14,7 @@
    * @param avatarsService
    * @constructor
    */
-  function UserController( userService, $mdSidenav, $mdBottomSheet, $log) {
+  function UserController( userService, $mdSidenav, $mdBottomSheet, $log, $http) {
     var self = this;
 
     self.selected     = null;
@@ -30,6 +30,7 @@
           .then( function( users ) {
             self.users    = [].concat(users);
             self.selected = users[0];
+            updateMovieInfo(self.selected.imdbID);
           });
 
     // *********************************
@@ -49,8 +50,23 @@
      */
     function selectUser ( user ) {
       self.selected = angular.isNumber(user) ? $scope.users[user] : user;
+
+      updateMovieInfo(self.selected.imdbID);
     }
 
+    function updateMovieInfo(imdbID){
+      var url = 'http://www.omdbapi.com/?i=' + imdbID + '&plot=full&r=json';
+      $http.get(url).then(movieInfoSuccessCallback, movieInfoErrorCallback);
+    }
+
+    function movieInfoSuccessCallback(data){
+      self.selected.imdbData = data.data;
+      console.log(self.selected.imdbData);
+    }
+
+    function movieInfoErrorCallback(data){
+      console.log(data);
+    }
     /**
      * Show the Contact view in the bottom sheet
      */

@@ -31,7 +31,7 @@
       md-is-locked-open="$mdMedia('gt-sm')">
 
     <md-toolbar class="md-whiteframe-z1">
-      <h3>Users</h3>
+      <h3>Movie List</h3>
     </md-toolbar>
 
     <md-list>
@@ -52,16 +52,29 @@
       <md-button id="main" class="menu" hide-gt-sm ng-click="ul.toggleList()" aria-label="Show User List">
         <md-icon md-svg-icon="menu" ></md-icon>
       </md-button>
-      <h3>Angular Material - Starter App</h3>
+      <h3>YouTube Movie Trailers</h3>
     </md-toolbar>
 
     <md-content flex id="content">
-        <md-icon md-svg-icon="{{ul.selected.avatar}}" class="avatar"></md-icon>
         <h2>{{ul.selected.name}}</h2>
-        <p>{{ul.selected.content}}</p>
+        <p><strong>Description: </strong>{{ul.selected.imdbData.Plot}}</p>
+
+        <!-- Use 'youtube-video' as an element or attribute. -->
+        <youtube-video video-id="ul.selected.ytId"></youtube-video>
+
+        <ul>
+            <li>Year: {{ul.selected.imdbData.Year}}</li>
+            <li>Genre: {{ul.selected.imdbData.Genre}}</li>
+            <li>Director: {{ul.selected.imdbData.Director}}</li>
+            <li>Writer: {{ul.selected.imdbData.Writer}}</li>
+            <li>Actors: {{ul.selected.imdbData.Actors}}</li>
+            <li>Metascore: {{ul.selected.imdbData.Metascore}}</li>
+            <li>IMDB Rating: {{ul.selected.imdbData.imdbRating}}</li>
+        </ul>
+
 
         <md-button class="contact" md-no-ink ng-click="ul.makeContact(ul.selected)" aria-label="Share with {{ ul.selected.name }}">
-          <md-tooltip>Contact {{ ul.selected.name }}</md-tooltip>
+          <md-tooltip>More about {{ ul.selected.name }}</md-tooltip>
           <md-icon md-svg-icon="share"></md-icon>
         </md-button>
       </md-content>
@@ -73,6 +86,9 @@
     <script src="../node_modules/angular-aria/angular-aria.js"></script>
     <script type="text/javascript" src="../node_modules/angular-material/angular-material.js"></script>
 
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="../node_modules/angular-youtube-embed/src/angular-youtube-embed.js"></script>
+
     <script src="./src/users/Users.js"></script>
     <script src="./src/users/UserController.js"></script>
     <script src="./src/users/UserService.js"></script>
@@ -80,7 +96,7 @@
     <script type="text/javascript">
 
           angular
-              .module('starterApp', ['ngMaterial', 'users'])
+              .module('starterApp', ['ngMaterial', 'users', 'youtube-embed'])
               .config(function($mdThemingProvider, $mdIconProvider){
 
                   $mdIconProvider
